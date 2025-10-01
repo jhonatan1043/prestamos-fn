@@ -76,6 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
                     TextFormField(
                       initialValue: nombre,
+                      readOnly: true,
                       decoration: InputDecoration(
                         labelText: 'Nombre',
                         filled: true,
@@ -86,7 +87,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderSide: const BorderSide(color: Color(0xFF00C853)),
                         ),
                       ),
-                      onChanged: (v) => setState(() { nombre = v; }),
                     ),
                     const SizedBox(height: 18),
                     TextFormField(
@@ -109,22 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: Text(errorMessage!, style: const TextStyle(color: Colors.red)),
                       ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00C853),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        onPressed: isLoading ? null : _updateNombre,
-                        child: isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('Actualizar nombre'),
-                      ),
-                    ),
+                    // ...no update button, only read-only fields...
                     const SizedBox(height: 32),
                   ],
                 ),

@@ -11,6 +11,7 @@ class ClienteRegisterScreen extends StatefulWidget {
 
 class _ClienteRegisterScreenState extends State<ClienteRegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  int  id = 0;
   String tipoIdentificacion = '';
   String identificacion = '';
   String nombres = '';
@@ -28,6 +29,7 @@ class _ClienteRegisterScreenState extends State<ClienteRegisterScreen> {
     final clienteRepo = ClienteRepository(apiService);
     final error = await clienteRepo.createCliente(
       ClienteModel(
+        id: id,
         tipoIdentificacion: tipoIdentificacion,
         identificacion: identificacion,
         nombres: nombres,

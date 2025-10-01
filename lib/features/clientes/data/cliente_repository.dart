@@ -2,6 +2,7 @@ import 'dart:convert';
 import '../../../core/network/api_service.dart';
 
 class ClienteModel {
+  final int id;
   final String tipoIdentificacion;
   final String identificacion;
   final String nombres;
@@ -11,6 +12,7 @@ class ClienteModel {
   final int edad;
 
   ClienteModel({
+    required this.id,
     required this.tipoIdentificacion,
     required this.identificacion,
     required this.nombres,
@@ -22,6 +24,7 @@ class ClienteModel {
 
   factory ClienteModel.fromJson(Map<String, dynamic> json) {
     return ClienteModel(
+      id: json['id'] ?? 0,
       tipoIdentificacion: json['tipoIdentificacion'] ?? '',
       identificacion: json['identificacion'] ?? '',
       nombres: json['nombres'] ?? '',
@@ -33,13 +36,14 @@ class ClienteModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'tipoIdentificacion': tipoIdentificacion,
-    'identificacion': identificacion,
-    'nombres': nombres,
-    'apellidos': apellidos,
-    'direccion': direccion,
-    'telefono': telefono,
-    'edad': edad,
+  'id': id,
+  'tipoIdentificacion': tipoIdentificacion,
+  'identificacion': identificacion,
+  'nombres': nombres,
+  'apellidos': apellidos,
+  'direccion': direccion,
+  'telefono': telefono,
+  'edad': edad,
   };
 
   static List<ClienteModel> listFromJson(String body) {
@@ -62,22 +66,22 @@ class ClienteRepository {
 
   Future<String?> createCliente(ClienteModel cliente) async {
     final response = await apiService.post('/clientes', cliente.toJson());
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       return null;
     }
     return 'Error al crear cliente';
   }
 
-  Future<String?> updateCliente(String id, ClienteModel cliente) async {
-    final response = await apiService.post('/clientes/$id', cliente.toJson());
+  Future<String?> updateCliente(int id, ClienteModel cliente) async {
+    final response = await apiService.put('/clientes/$id', cliente.toJson());
     if (response.statusCode == 200) {
       return null;
     }
     return 'Error al actualizar cliente';
   }
 
-  Future<String?> deleteCliente(String id) async {
-    final response = await apiService.post('/clientes/$id/delete', {});
+  Future<String?> deleteCliente(int id) async {
+    final response = await apiService.delete('/clientes/$id');
     if (response.statusCode == 200) {
       return null;
     }

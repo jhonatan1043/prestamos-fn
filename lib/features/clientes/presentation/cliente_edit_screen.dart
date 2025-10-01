@@ -12,6 +12,7 @@ class ClienteEditScreen extends StatefulWidget {
 
 class _ClienteEditScreenState extends State<ClienteEditScreen> {
   final _formKey = GlobalKey<FormState>();
+  late int id;
   late String tipoIdentificacion;
   late String identificacion;
   late String nombres;
@@ -25,6 +26,7 @@ class _ClienteEditScreenState extends State<ClienteEditScreen> {
   @override
   void initState() {
     super.initState();
+    id = widget.cliente.id;
     tipoIdentificacion = widget.cliente.tipoIdentificacion;
     identificacion = widget.cliente.identificacion;
     nombres = widget.cliente.nombres;
@@ -40,8 +42,9 @@ class _ClienteEditScreenState extends State<ClienteEditScreen> {
     final apiService = ApiService(baseUrl: 'https://prestamos-bk.onrender.com');
     final clienteRepo = ClienteRepository(apiService);
     final error = await clienteRepo.updateCliente(
-      identificacion,
+      id,
       ClienteModel(
+        id: id,
         tipoIdentificacion: tipoIdentificacion,
         identificacion: identificacion,
         nombres: nombres,

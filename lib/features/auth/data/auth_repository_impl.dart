@@ -9,16 +9,18 @@ class AuthRepositoryImpl {
 
   Future<String?> login(LoginModel loginModel) async {
     try {
-
       final response = await apiService.post('/auth/login', loginModel.toJson());
-
       if (response.statusCode == 200 || response.statusCode == 201) {
-
         final body = response.body;
         final data = body.isNotEmpty ? jsonDecode(body) : null;
         final token = data != null && data['access_token'] != null ? data['access_token'] as String : null;
         String role = 'USER';
-        
+        String nombre = '';
+        String email = '';
+        if (data != null && data['user'] != null) {
+          nombre = data['user']['nombre'] ?? '';
+          email = data['user']['email'] ?? '';
+        }
         if (token != null) {
           // Extraer payload del JWT
           final parts = token.split('.');
@@ -28,6 +30,8 @@ class AuthRepositoryImpl {
             role = payloadMap['roles'] ?? 'USER';
           }
           await TokenStorage.saveToken(token, role);
+          await TokenStorage.saveNombre(nombre);
+          await TokenStorage.saveEmail(email);
         }
         return null; // null = éxito
       } else if (response.statusCode == 401) {
