@@ -42,7 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               title: "Gestionar Clientes",
               icon: Icons.group_add,
               onTap: () {
-                // Acción para crear clientes
+                Navigator.pushNamed(context, '/cliente_list');
               },
             ),
             _DashboardOption(

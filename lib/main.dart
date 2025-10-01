@@ -4,6 +4,9 @@ import 'features/user/presentation/register_screen.dart';
 import 'features/home/presentation/dashboard_screen.dart';
 import 'features/user/presentation/user_list_screen.dart';
 import 'features/user/presentation/profile_screen.dart';
+import 'features/clientes/presentation/cliente_list_screen.dart';
+import 'features/clientes/presentation/cliente_register_screen.dart';
+import 'features/clientes/presentation/cliente_edit_screen.dart';
 import 'core/utils/session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -55,12 +58,15 @@ class PrestamosApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/home': (context) => const Placeholder(),
-        '/dashboard': (context) => const DashboardScreen(),
-        '/user_list': (context) => const UserListScreen(),
-        '/profile': (context) => const ProfileScreen(),
+  '/login': (context) => const LoginScreen(),
+  '/register': (context) => const RegisterScreen(),
+  '/home': (context) => const Placeholder(),
+  '/dashboard': (context) => const DashboardScreen(),
+  '/user_list': (context) => const UserListScreen(),
+  '/profile': (context) => const ProfileScreen(),
+  '/cliente_list': (context) => const ClienteListScreen(),
+  '/cliente_register': (context) => const ClienteRegisterScreen(),
+  '/cliente_edit': (context) => throw UnimplementedError('Use Navigator.push with arguments for ClienteEditScreen'),
       },
     );
   }
