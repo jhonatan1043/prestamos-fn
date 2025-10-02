@@ -6,7 +6,8 @@ import 'features/user/presentation/user_list_screen.dart';
 import 'features/user/presentation/profile_screen.dart';
 import 'features/clientes/presentation/cliente_list_screen.dart';
 import 'features/clientes/presentation/cliente_register_screen.dart';
-import 'features/clientes/presentation/cliente_edit_screen.dart';
+import 'features/prestamos/presentation/prestamo_list_screen.dart';
+import 'features/prestamos/presentation/prestamo_create_screen.dart';
 import 'core/utils/session_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -58,6 +59,8 @@ class PrestamosApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
+  '/prestamo_list': (context) => const PrestamoListScreen(),
+  '/prestamo_create': (context) => const PrestamoCreateScreen(),
   '/login': (context) => const LoginScreen(),
   '/register': (context) => const RegisterScreen(),
   '/home': (context) => const Placeholder(),

@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               title: "Gestionar Préstamos",
               icon: Icons.account_balance,
               onTap: () {
-                // Acción para gestionar préstamos
+                Navigator.pushNamed(context, '/prestamo_list');
               },
             ),
             _DashboardOption(
