@@ -66,10 +66,33 @@ class _PrestamoListScreenState extends State<PrestamoListScreen> {
                       final p = prestamos[index];
                       return Card(
                         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: ListTile(
-                          leading: const Icon(Icons.monetization_on, color: Color(0xFF00C853)),
-                          title: Text('Código: ${p.codigo}'),
-                          subtitle: Text('Monto: ${p.monto}\nTasa: ${p.tasa}%\nPlazo: ${p.plazoDias} días\nEstado: ${p.estado}'),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.monetization_on, color: Color(0xFF00C853)),
+                              title: Text('Código: ${p.codigo}'),
+                              subtitle: Text('Monto: ${p.monto}\nTasa: ${p.tasa}%\nPlazo: ${p.plazoDias} días\nEstado: ${p.estado}'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blueAccent,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                icon: const Icon(Icons.payment),
+                                label: const Text('Pagos'),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/pagos_dashboard',
+                                    arguments: {'prestamoId': p.id},
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },

@@ -56,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               title: "Pagos",
               icon: Icons.payment,
               onTap: () {
-                // Acción para ver pagos
+                Navigator.pushNamed(context, '/pagos_dashboard');
               },
             ),
             _DashboardOption(
@@ -72,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               title: "Pagos",
               icon: Icons.payment,
               onTap: () {
-                // Acción para ver pagos
+                Navigator.pushNamed(context, '/pagos_dashboard');
               },
             ),
           ];
