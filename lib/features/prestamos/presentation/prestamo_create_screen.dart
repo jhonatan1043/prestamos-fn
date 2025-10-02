@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:prestamosft/core/utils/token_storage.dart';
 import '../data/prestamo_repository.dart';
 import '../data/prestamo_model.dart';
 import '../../../core/network/api_service.dart';
+import '../../clientes/data/cliente_repository.dart';
 
 class PrestamoCreateScreen extends StatefulWidget {
   const PrestamoCreateScreen({Key? key}) : super(key: key);
@@ -18,26 +20,29 @@ class _PrestamoCreateScreenState extends State<PrestamoCreateScreen> {
   String tasa = '';
   String plazoDias = '';
   DateTime? fechaInicio;
-  String estado = 'ACTIVO';
-  String clienteId = '';
-  String usuarioId = '';
+  int? clienteId;
   bool isLoading = false;
   String? errorMessage;
+  List<ClienteModel> clientes = [];
 
   Future<void> _crearPrestamo() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() { isLoading = true; errorMessage = null; });
     final repo = PrestamoRepository(ApiService(baseUrl: 'https://prestamos-bk.onrender.com'));
+    // Generar código automáticamente
+    final autoCodigo = 'PRE-${DateTime.now().millisecondsSinceEpoch}';
+    // Obtener usuarioId desde sesión
+     final userId = await TokenStorage.getId() ?? 0;
     final prestamo = PrestamoModel(
       id: id,
-      codigo: codigo,
+      codigo: autoCodigo,
       monto: double.tryParse(monto) ?? 0,
       tasa: double.tryParse(tasa) ?? 0,
       plazoDias: int.tryParse(plazoDias) ?? 0,
       fechaInicio: fechaInicio ?? DateTime.now(),
-      estado: estado,
-      clienteId: int.tryParse(clienteId) ?? 0,
-      usuarioId: int.tryParse(usuarioId) ?? 0,
+      estado: 'ACTIVO',
+      clienteId: clienteId ?? 0,
+      usuarioId: userId, // Ajusta si tienes el id del usuario en sesión
     );
     final error = await repo.createPrestamo(prestamo);
     setState(() { isLoading = false; });
@@ -93,10 +98,11 @@ class _PrestamoCreateScreenState extends State<PrestamoCreateScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            // Código generado automáticamente
                             TextFormField(
-                              decoration: const InputDecoration(labelText: 'Código'),
-                              validator: (v) => v != null && v.isNotEmpty ? null : 'Campo requerido',
-                              onChanged: (v) => codigo = v,
+                              decoration: const InputDecoration(labelText: 'Código (auto)'),
+                              initialValue: 'PRE-${DateTime.now().millisecondsSinceEpoch}',
+                              readOnly: true,
                             ),
                             const SizedBox(height: 18),
                             TextFormField(
@@ -138,29 +144,28 @@ class _PrestamoCreateScreenState extends State<PrestamoCreateScreen> {
                               },
                             ),
                             const SizedBox(height: 18),
-                            DropdownButtonFormField<String>(
-                              value: estado,
-                              decoration: const InputDecoration(labelText: 'Estado'),
-                              items: const [
-                                DropdownMenuItem(value: 'ACTIVO', child: Text('ACTIVO')),
-                                DropdownMenuItem(value: 'CERRADO', child: Text('CERRADO')),
-                              ],
-                              onChanged: (v) => setState(() { estado = v ?? 'ACTIVO'; }),
+                            // Estado se maneja internamente
+                            FutureBuilder<List<ClienteModel>>(
+                              future: ClienteRepository(ApiService(baseUrl: 'https://prestamos-bk.onrender.com')).getClientes(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const CircularProgressIndicator();
+                                }
+                                final clientesList = snapshot.data!;
+                                return DropdownButtonFormField<int>(
+                                  decoration: const InputDecoration(labelText: 'Cliente'),
+                                  value: clienteId,
+                                  items: clientesList.map((c) => DropdownMenuItem(
+                                    value: c.id,
+                                    child: Text('${c.nombres} ${c.apellidos} (${c.identificacion})'),
+                                  )).toList(),
+                                  onChanged: (v) => setState(() { clienteId = v; }),
+                                  validator: (v) => v != null ? null : 'Seleccione un cliente',
+                                );
+                              },
                             ),
                             const SizedBox(height: 18),
-                            TextFormField(
-                              decoration: const InputDecoration(labelText: 'ID Cliente'),
-                              keyboardType: TextInputType.number,
-                              validator: (v) => v != null && int.tryParse(v) != null ? null : 'ID inválido',
-                              onChanged: (v) => clienteId = v,
-                            ),
-                            const SizedBox(height: 18),
-                            TextFormField(
-                              decoration: const InputDecoration(labelText: 'ID Usuario'),
-                              keyboardType: TextInputType.number,
-                              validator: (v) => v != null && int.tryParse(v) != null ? null : 'ID inválido',
-                              onChanged: (v) => usuarioId = v,
-                            ),
+                            // UsuarioId se maneja internamente
                           ],
                         ),
                       ),

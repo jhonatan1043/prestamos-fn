@@ -17,10 +17,14 @@ class AuthRepositoryImpl {
         String role = 'USER';
         String nombre = '';
         String email = '';
+        int id = 0;
+
         if (data != null && data['user'] != null) {
           nombre = data['user']['nombre'] ?? '';
           email = data['user']['email'] ?? '';
+          id = data['user']['id'] ?? 0;
         }
+
         if (token != null) {
           // Extraer payload del JWT
           final parts = token.split('.');
@@ -32,7 +36,9 @@ class AuthRepositoryImpl {
           await TokenStorage.saveToken(token, role);
           await TokenStorage.saveNombre(nombre);
           await TokenStorage.saveEmail(email);
+          await TokenStorage.saveId(id);
         }
+        
         return null; // null = éxito
       } else if (response.statusCode == 401) {
         return 'Credenciales incorrectas';

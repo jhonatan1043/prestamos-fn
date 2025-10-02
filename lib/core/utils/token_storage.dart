@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenStorage {
+  static const _idKey = 'user_id';
   static const _tokenKey = 'auth_token';
   static const _roleKey = 'user_role';
   static const _nombreKey = 'user_nombre';
@@ -10,6 +11,16 @@ class TokenStorage {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, token);
     await prefs.setString(_roleKey, role);
+  }
+
+  static Future<void> saveId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_idKey, id);
+  }
+
+  static Future<int?> getId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_idKey);
   }
 
   static Future<String?> getToken() async {
@@ -48,5 +59,6 @@ class TokenStorage {
     await prefs.remove(_roleKey);
     await prefs.remove(_nombreKey);
     await prefs.remove(_emailKey);
+    await prefs.remove(_idKey);
   }
 }
