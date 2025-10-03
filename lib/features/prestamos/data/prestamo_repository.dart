@@ -11,6 +11,9 @@ class PrestamoRepository {
     if (response.statusCode == 200) {
       final List<dynamic> data = response.body.isNotEmpty ? jsonDecode(response.body) : [];
       return data.map((e) => PrestamoModel.fromJson(e)).toList();
+    } else if (response.statusCode == 304) {
+      // No hay cambios, pero no hay datos nuevos
+      return [];
     }
     return [];
   }
