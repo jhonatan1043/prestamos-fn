@@ -16,10 +16,17 @@ class PrestamoRepository {
   }
 
   Future<String?> createPrestamo(PrestamoModel prestamo) async {
-    final response = await apiService.post('/prestamos', prestamo.toJson());
+    final response = await apiService.post('/prestamos', prestamo.toJson(includeId: false));
     if (response.statusCode == 201 || response.statusCode == 200) {
       return null;
     }
+    // Extraer solo el mensaje del backend si existe
+    try {
+      final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+      if (data is Map && data.containsKey('message')) {
+        return data['message'].toString();
+      }
+    } catch (_) {}
     return response.body.isNotEmpty ? response.body : 'Error al crear préstamo';
   }
 }

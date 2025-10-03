@@ -41,17 +41,17 @@ class PrestamoModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-  'id': id,
-  'codigo': codigo,
-  'monto': monto,
-  'tasa': tasa,
-  'plazoDias': plazoDias,
-  'fechaInicio': fechaInicio.toIso8601String(),
-  'estado': estado,
-  'clienteId': clienteId,
-  'usuarioId': usuarioId,
-  if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
-  if (updatedAt != null) 'updatedAt': updatedAt!.toIso8601String(),
+  Map<String, dynamic> toJson({bool includeId = false}) => {
+    if (includeId) 'id': id,
+    'codigo': codigo,
+    'monto': monto,
+    'tasa': tasa,
+    'plazoDias': plazoDias,
+    'fechaInicio': fechaInicio.toIso8601String(),
+    'estado': estado,
+    'clienteId': int.tryParse(clienteId.toString()) ?? 0,
+    'usuarioId': int.tryParse(usuarioId.toString()) ?? 0,
+    if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
+    if (updatedAt != null) 'updatedAt': updatedAt!.toIso8601String(),
   };
 }
